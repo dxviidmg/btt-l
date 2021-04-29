@@ -17,14 +17,23 @@ class TimeStampedModel(models.Model):
 class Brand(TimeStampedModel):
     name = models.CharField(max_length=20)
 
+    def __str__(self):
+        return self.name
+
 
 class Product(models.Model):
     brand = models.ForeignKey(Brand, on_delete=models.CASCADE)
-    sku = models.CharField(max_length=20)
+    sku = models.CharField(max_length=20, unique=True)
     name = models.CharField(max_length=20)
     price = models.DecimalField(max_digits=20, decimal_places=2)
+
+    def __str__(self):
+        return self.name
 
 
 class VisitsByProduct(models.Model):
     product = models.ForeignKey(Product, on_delete=models.CASCADE)
     number = models.IntegerField(default=0)
+
+    def __str__(self):
+        return self.product.name
