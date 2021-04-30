@@ -10,7 +10,7 @@ class BrandSerializer(serializers.HyperlinkedModelSerializer):
         model = Brand
         fields = ("url", "name")
 
-class VisitsByProductSerializer(serializers.HyperlinkedModelSerializer):
+class VisitsSerializer(serializers.HyperlinkedModelSerializer):
 
     class Meta:
         model = Visits
@@ -27,20 +27,3 @@ class ProductSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = Product
         fields = ("url", "brand", "name", "sku", "price")
-
-"""
-    def create(self, validated_data):
-        print(self)
-        print(validated_data.data) 
-
-#        brand = validated_data.data.pop('brand')
-        print('brand', brand)
-#        brand, created = Brand.objects.get_or_create(name=brand)
-        # files = validated_data.pop('files')
-        product = Product.objects.create(**validated_data)
-
-        # for file in files:
-        #     PolizasFile.objects.create(owner = poliza,**file)        
-
-        return product
-"""

@@ -4,6 +4,7 @@ from .models import *
 from rest_framework import viewsets
 from .serializers import *
 from rest_framework.permissions import IsAuthenticated 
+from django.shortcuts import get_object_or_404
 
 class BrandViewSet(viewsets.ModelViewSet):
     permission_classes = (IsAuthenticated,)
@@ -15,12 +16,23 @@ class ProductViewSet(viewsets.ModelViewSet):
     queryset = Product.objects.all().order_by('id')
     serializer_class = ProductSerializer
     
+    def create(self, request):
+        user = request.user
+        if user.is_staff == True:
+            data = request.data
+            brand_id = request.data.pop('brand')
+            brand = Brand.objects.get(id=brand_id)
+            product = Product.objects.create(**data, brand=brand)
+            serializer = ProductSerializer(product, context = {'request':request}, many = False)
+            return Response(serializer.data)
+        else:
+            return JsonResponse({'error': "You don't have permission to perform this action."})
 
+    
     def retrieve(self, request, pk=None):
         user = request.user
-        product = Product.objects.get(id = pk)
+        product = get_object_or_404(Product, pk=pk)
         if user.is_staff == False:
-
 
             visits, visits_created = Visits.objects.get_or_create(user=user, product=product)
             visits.number = visits.number + 1
@@ -31,7 +43,6 @@ class ProductViewSet(viewsets.ModelViewSet):
 
     def update(self, request, pk=None, *args, **kwargs):
         user = request.user
-        product = Product.objects.get(id = pk)
         if user.is_staff == True:
             print('Envio de correos')
         
@@ -41,21 +52,11 @@ class ProductViewSet(viewsets.ModelViewSet):
         else:
             return JsonResponse({'error': "You don't have permission to perform this action."})
 
-
-    def create(self, request):
-        print(self)
-        print(request.data) 
-
-        data = request.data
-        brand_id = request.data.pop('brand')
-        print('brand', brand_id)
-        print('b2', data)
-        brand_instance, created = Brand.objects.get_or_create(id=brand_id)
-        # files = validated_data.pop('files')
-        product = Product.objects.create(**data, brand=brand_instance)
-
-        serializer = ProductSerializer(product, context = {'request':request}, many = False)
-        return Response(serializer.data)       
-
-#        return product
-#            return JsonResponse({'error': "You don't have permission to perform this action."})
+    def destroy(self, request, pk=None):
+        user = request.user
+        if user.is_staff == True:
+            product = get_object_or_404(Product, pk=pk)
+            product.delete()
+            return Response(status=204)
+        else:
+            return JsonResponse({'error': "You don't have permission to perform this action."})
