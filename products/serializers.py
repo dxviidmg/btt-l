@@ -13,24 +13,34 @@ class BrandSerializer(serializers.HyperlinkedModelSerializer):
 class VisitsByProductSerializer(serializers.HyperlinkedModelSerializer):
 
     class Meta:
-        model = VisitsByProduct
-        fields = ('id', "url", "product", "number")
+        model = Visits
+        fields = ('id', "url", "product", "user", "number", )
 
 
 
 class ProductSerializer(serializers.HyperlinkedModelSerializer):
+    brand = serializers.SerializerMethodField()
+
+    def get_brand(self, obj):
+        return obj.brand.id
 
     class Meta:
         model = Product
-        fields = ("url", "name", "sku", "price")
+        fields = ("url", "brand", "name", "sku", "price")
 
-    def update(self, instance, validated_data):
-        request = self.context.get('request')
-        if request.user.is_staff == True: 
-            return instance
-        else:
-            #Error
-#            return Response({'message': 'Fecha promesa de pago actualizada de manera correcta'}, status=200)
-            return Response('')
+"""
+    def create(self, validated_data):
+        print(self)
+        print(validated_data.data) 
 
+#        brand = validated_data.data.pop('brand')
+        print('brand', brand)
+#        brand, created = Brand.objects.get_or_create(name=brand)
+        # files = validated_data.pop('files')
+        product = Product.objects.create(**validated_data)
 
+        # for file in files:
+        #     PolizasFile.objects.create(owner = poliza,**file)        
+
+        return product
+"""
