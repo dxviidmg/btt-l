@@ -23,12 +23,11 @@ class ProductViewSet(viewsets.ModelViewSet):
 
 
             visits, visits_created = Visits.objects.get_or_create(user=user, product=product)
-            if visits_created == False:
-                visits.number = visits.number + 1
-                visits.save()
+            visits.number = visits.number + 1
+            visits.save()
 
-            serializer = ProductSerializer(product, context = {'request':request}, many = False)
-            return Response(serializer.data)
+        serializer = ProductSerializer(product, context = {'request':request}, many = False)
+        return Response(serializer.data)
 
     def update(self, request, pk=None, *args, **kwargs):
         user = request.user
