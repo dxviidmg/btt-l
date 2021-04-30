@@ -15,6 +15,17 @@ class ProductViewSet(viewsets.ModelViewSet):
     queryset = Product.objects.all().order_by('id')
     serializer_class = ProductSerializer
     
+    def create(self, request):
+        user = request.user
+        if user.is_staff == True:
+            data = request.data
+            brand_id = request.data.pop('brand')
+            brand = Brand.objects.get(id=brand_id)
+            product = Product.objects.create(**data, brand=brand)
+            serializer = ProductSerializer(product, context = {'request':request}, many = False)
+            return Response(serializer.data)
+        else:
+            return JsonResponse({'error': "You don't have permission to perform this action."})
 
     def retrieve(self, request, pk=None):
         user = request.user
@@ -41,21 +52,14 @@ class ProductViewSet(viewsets.ModelViewSet):
         else:
             return JsonResponse({'error': "You don't have permission to perform this action."})
 
+    def destroy(self, request, pk=None, *args, **kwargs):
+        print('entre')
+        user = request.user
+        if user.is_staff == True:
+            print('Se va a borrar')
+            return Response(serializer.data)
+        else:
+            return JsonResponse({'error': "You don't have permission to perform this action."})
 
-    def create(self, request):
-        print(self)
-        print(request.data) 
 
-        data = request.data
-        brand_id = request.data.pop('brand')
-        print('brand', brand_id)
-        print('b2', data)
-        brand_instance, created = Brand.objects.get_or_create(id=brand_id)
-        # files = validated_data.pop('files')
-        product = Product.objects.create(**data, brand=brand_instance)
 
-        serializer = ProductSerializer(product, context = {'request':request}, many = False)
-        return Response(serializer.data)       
-
-#        return product
-#            return JsonResponse({'error': "You don't have permission to perform this action."})
