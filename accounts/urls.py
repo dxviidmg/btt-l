@@ -4,9 +4,10 @@ from rest_framework import routers
 from . import views
 
 router = routers.DefaultRouter()
-router.register(r'users', views.UserViewSet)
+router.register('users', views.UserViewSet)
 
 urlpatterns = [
-    path('', include(router.urls)),
+
     path('api-token-auth', obtain_auth_token, name='api_token_auth'),
+    path('', include(router.urls)),
 ]
