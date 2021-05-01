@@ -43,6 +43,7 @@ class ProductViewSet(viewsets.ModelViewSet):
         if serializer.is_valid():
             serializer.save()
 
+            #Email Notification
             msg = 'The product with sku ' + instance.sku + ' was updated.' + '\nThe attributes are:\n'
             attributes = list('*' + k for k in request.data.keys())
             attributes = '\n'.join(list(attributes))
