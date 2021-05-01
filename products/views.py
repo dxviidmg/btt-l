@@ -2,7 +2,7 @@ from django.shortcuts import render
 from .models import *
 from rest_framework import viewsets
 from .serializers import *
-from rest_framework.permissions import IsAuthenticated
+from rest_framework.permissions import IsAuthenticated, IsAuthenticatedOrReadOnly
 from django.core.mail import send_mail
 
 
@@ -13,7 +13,7 @@ class BrandViewSet(viewsets.ModelViewSet):
 
 
 class ProductViewSet(viewsets.ModelViewSet):
-    permission_classes = (IsAuthenticated,)
+    permission_classes = (IsAuthenticatedOrReadOnly,)
     queryset = Product.objects.all().order_by('id')
     serializer_class = ProductSerializer
     
@@ -30,13 +30,12 @@ class ProductViewSet(viewsets.ModelViewSet):
             return JsonResponse({'error': "You don't have permission to perform this action."})
 
     def retrieve(self, request, pk=None):
+        print('hola')
         user = request.user
+        print(user)
         instance = self.get_object()
-        if user.is_staff == False:
-
-            visits, visits_created = Visits.objects.get_or_create(user=user, product=instance)
-            visits.number = visits.number + 1
-            visits.save()
+        if user.is_anonymous:
+            visits = Visit.objects.create(product=instance)
 
         serializer = ProductSerializer(instance, context = {'request':request}, many = False)
         return Response(serializer.data)

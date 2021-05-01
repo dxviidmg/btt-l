@@ -12,11 +12,11 @@ class BrandSerializer(serializers.HyperlinkedModelSerializer):
         fields = ("url", "name")
 
 
-class VisitsSerializer(serializers.HyperlinkedModelSerializer):
+#class VisitsSerializer(serializers.HyperlinkedModelSerializer):
 
-    class Meta:
-        model = Visits
-        fields = ('id', "url", "product", "user", "number", )
+#    class Meta:
+#        model = Visits
+#        fields = ('id', "url", "product", "user", "number", )
 
 
 class ProductSerializer(serializers.HyperlinkedModelSerializer):

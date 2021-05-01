@@ -30,14 +30,14 @@ class Product(models.Model):
         return self.name
 
 
-class Visits(models.Model):
+class Visit(TimeStampedModel):
     """"
     Counts the number of a user's visits makes to a product
     """
     product = models.ForeignKey(Product, on_delete=models.CASCADE)
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
-    number = models.IntegerField(default=0)
+#    user = models.ForeignKey(User, on_delete=models.CASCADE)
+#    number = models.IntegerField(default=0)
     
 
     def __str__(self):
-        return self.product.name + ' ' + self.user.username
+        return self.product.name
