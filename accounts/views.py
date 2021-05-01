@@ -6,6 +6,7 @@ from django.contrib.auth.models import User
 from django.http import JsonResponse
 from rest_framework.response import Response
 
+
 class UserViewSet(viewsets.ModelViewSet):
     permission_classes = (IsAuthenticated,)
     queryset = User.objects.all().order_by('id')
@@ -22,14 +23,11 @@ class UserViewSet(viewsets.ModelViewSet):
             return JsonResponse({'error': "You don't have permission to perform this action."})
 
 
-
-
-
     def update(self, request, pk=None, *args, **kwargs):
         user = request.user
-        if user.is_staff == True:        
-            instance = self.get_object()
+        instance = self.get_object()
 
+        if user.is_staff == True or user.id == instance.id:        
             serializer = self.serializer_class(instance, data=request.data, context={'request': request}, partial=True)
             if serializer.is_valid():
                 serializer.save()
@@ -37,6 +35,7 @@ class UserViewSet(viewsets.ModelViewSet):
 
         else:
             return JsonResponse({'error': "You don't have permission to perform this action."})
+
 
     def destroy(self, request, pk=None):
         user = request.user
