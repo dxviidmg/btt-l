@@ -1,8 +1,6 @@
 from rest_framework import serializers
 from .models import *
 from django.shortcuts import get_object_or_404
-from django.http import JsonResponse, HttpResponse
-from rest_framework.response import Response
 
 
 class BrandSerializer(serializers.HyperlinkedModelSerializer):
