@@ -20,9 +20,9 @@ To install virtualenvwrapper see https://virtualenvwrapper.readthedocs.io/en/lat
 
 ### requirements.txt
 After cloning the project folder, in the root there is a file called requirements.txt. This file contains all the packages required to run the API. To install those packages, in your terminal run
-`` shell
+``` shell
 pip install -r requirements.txt
-''
+```
 
 ----
 
