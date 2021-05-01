@@ -3,9 +3,8 @@ from django.contrib.auth.models import User
 
 class TimeStampedModel(models.Model):
     """
-    An abstract base class model that provides self-
-    . fields.
-    updating ``created`` and ``updated_at``
+    Abstract class that provides the date and 
+    time of the create and update fields
     """
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
@@ -32,10 +31,13 @@ class Product(models.Model):
 
 
 class Visits(models.Model):
+    """"
+    Counts the number of a user's visits makes to a product
+    """
     product = models.ForeignKey(Product, on_delete=models.CASCADE)
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     number = models.IntegerField(default=0)
     
 
     def __str__(self):
-        return self.product.name
+        return self.product.name + ' ' + self.user.username
