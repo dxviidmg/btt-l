@@ -7,6 +7,7 @@ from django.core.mail import send_mail
 from django.http import JsonResponse
 from rest_framework.response import Response
 
+
 class BrandViewSet(viewsets.ModelViewSet):
     permission_classes = (IsAuthenticated,)
     queryset = Brand.objects.all().order_by('id')
