@@ -3,4 +3,4 @@ from products.models import *
 
 admin.site.register(Brand)
 admin.site.register(Product)
-admin.site.register(Visits)
+admin.site.register(Visit)
