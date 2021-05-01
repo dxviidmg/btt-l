@@ -4,6 +4,8 @@ from rest_framework import viewsets
 from .serializers import *
 from rest_framework.permissions import IsAuthenticated
 from django.core.mail import send_mail
+from django.http import JsonResponse
+from rest_framework.response import Response
 
 
 class BrandViewSet(viewsets.ModelViewSet):
