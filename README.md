@@ -1,4 +1,4 @@
-# P-MB
+# BTT-L
 
 This repository has an products api
 
@@ -29,23 +29,29 @@ pip install -r requirements.txt
 ## Setting
 
 At the root of the project, run
-`` shell
+``` shell
 python manage.py makemigrations
-''
+```
 to generate the missing migrations. If none is created, that's fine. Now to apply those migrations, run
-`` shell
+``` shell
 python manage.py migrate
-''
+```
 
 ----
 
-## Run server
+## Runserver
 
 Inside your virtual environment, using your settings and in the root folder, run
-`` shell
+``` shell
 python manage.py runserver
-''
+```
 And the server will be active, to enter the Django REST Framework interface, in your web browser enter
-''
+```
 http: // localhost: 8000
-''
+```
+----
+
+## Apps
+
+* Accounts (CRUD Users)
+* Products (CRUD Products)
