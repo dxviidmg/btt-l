@@ -49,6 +49,9 @@ class ProductViewSet(viewsets.ModelViewSet):
             msg = msg + attributes
 
             admin_emails = list(User.objects.filter(is_staff=True).values_list('email', flat=True))
-            send_mail('Product update', msg, None, admin_emails, fail_silently=False)
+            try:
+                send_mail('Product update', msg, None, admin_emails, fail_silently=False)
+            except Exception as e:
+                print('Error sending emails', e)
         
         return Response(serializer.data)
