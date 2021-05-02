@@ -55,3 +55,7 @@ http: // localhost: 8000
 
 * Accounts (CRUD Users)
 * Products (CRUD Products)
+
+----
+
+Note: Includes unit tests
