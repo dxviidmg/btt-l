@@ -31,6 +31,7 @@ class ProductViewSet(viewsets.ModelViewSet):
         user = request.user
         instance = self.get_object()
         if user.is_anonymous:
+            #Log visit product
             visits = Visit.objects.create(product=instance)
 
         serializer = ProductSerializer(instance, context = {'request':request}, many = False)
@@ -43,12 +44,16 @@ class ProductViewSet(viewsets.ModelViewSet):
         if serializer.is_valid():
             serializer.save()
 
+            #Product update email notification
             msg = 'The product with sku ' + instance.sku + ' was updated.' + '\nThe attributes are:\n'
             attributes = list('*' + k for k in request.data.keys())
             attributes = '\n'.join(list(attributes))
             msg = msg + attributes
 
             admin_emails = list(User.objects.filter(is_staff=True).values_list('email', flat=True))
-            send_mail('Product update', msg, None, admin_emails, fail_silently=False)
+            try:
+                send_mail('Product update', msg, None, admin_emails, fail_silently=False)
+            except Exception as e:
+                print('Error sending emails', e)
         
         return Response(serializer.data)
